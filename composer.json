@@ -1,0 +1,27 @@
+{
+    "name": "medvinator/bx-force",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Aleksandr Medvedev",
+            "email": "alex@lifestar.ru"
+        }
+    ],
+    "require": {
+        "php": "^7.2",
+        "illuminate/support": "^7.28"
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^5.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Medvinator\\BxForce\\": "src/"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
