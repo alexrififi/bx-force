@@ -10,7 +10,8 @@
     "require": {
         "php": "^7.2",
         "illuminate/support": "^7.28",
-        "monolog/monolog": "^2.1"
+        "monolog/monolog": "^2.1",
+        "symfony/http-kernel": "^5.1"
     },
     "require-dev": {
         "symfony/var-dumper": "^5.1"
