@@ -4,6 +4,11 @@ namespace Medvinator\BxForce\Support;
 
 use Bitrix\Main\Config\Configuration;
 
+/**
+ * Class Settings
+ *
+ * @deprecated
+ */
 class Settings
 {
     /**
