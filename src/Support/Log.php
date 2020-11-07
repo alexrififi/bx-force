@@ -22,8 +22,8 @@ class Log
 
     public function __construct(
         string $channel,
-        ?string $format = "%datetime% %level_name% > %message%  %context% %extra%\n",
-        ?string $dateFormat = 'H:i'
+        ?string $format = "%datetime%;%message%\n",
+        ?string $dateFormat = 'd.m.Y H:i'
     ) {
         $dir = Application::getDocumentRoot() . '/upload/logs';
 
