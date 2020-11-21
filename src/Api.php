@@ -112,13 +112,7 @@ class Api
         $method = $handler[1];
 
         $this->request->modifyByQueryString( "action={$this->module->implode( ':' )}.api.{$controller}.{$method}" );
-
-        $data = [];
-        if ( Str::upper( $this->request->getRequestMethod() ) === 'PATCH' ) {
-            $data = json_decode( file_get_contents( 'php://input' ), true );
-        }
-
-        $this->request->getPostList()->set( array_merge( $data, $vars ) );
+        $this->request->getPostList()->set( $vars );
 
         Application::getInstance()->run();
     }
