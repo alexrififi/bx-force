@@ -4,6 +4,7 @@ namespace Medvinator\BxForce\Models;
 
 use Bitrix\Main\UserTable;
 use Illuminate\Support\Carbon;
+use Medvinator\BxForce\Database\Model;
 
 /**
  * Class User
@@ -16,7 +17,7 @@ use Illuminate\Support\Carbon;
  */
 class User extends Model
 {
-    public static $bxTable = UserTable::class;
+    public $bxTable = UserTable::class;
 
     /**
      * Indicates if the model should be timestamped.
@@ -26,11 +27,11 @@ class User extends Model
     public $timestamps = false;
 
     /**
-     * The attributes that should be cast.
+     * The attributes that should be mutated to dates.
      *
      * @var array
      */
-    protected $casts = [
-        'personal_birthday' => 'date',
+    protected $dates = [
+        'personal_birthday',
     ];
 }
