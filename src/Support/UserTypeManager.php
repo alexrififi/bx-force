@@ -4,6 +4,11 @@ namespace Medvinator\BxForce\Support;
 
 use CUserTypeManager;
 
+/**
+ * Class UserTypeManager
+ *
+ * @deprecated
+ */
 class UserTypeManager
 {
     /**

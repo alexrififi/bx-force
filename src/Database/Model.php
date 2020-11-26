@@ -10,12 +10,16 @@ use Bitrix\Main\ORM\Objectify\EntityObject;
 use Bitrix\Main\SystemException;
 use Bitrix\Main\Type\Date;
 use Bitrix\Main\Type\DateTime;
+use Bitrix\Main\UserField\Internal\Registry;
+use Bitrix\Main\UserField\Internal\UserFieldHelper;
+use CUserTypeManager;
 use Illuminate\Support\Str;
 
 /**
  * @method static create(array $attributes = [])
  * @method static find($id, array $columns = [ '*' ])
  * @method static findBy(string $field, $value, array $columns = [ '*' ])
+ * @method static Builder withUserFields()
  */
 abstract class Model extends \Illuminate\Database\Eloquent\Model
 {
@@ -23,6 +27,15 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model
      * @var string
      */
     public $bxTable;
+
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
+
+    public $userFields = [];
 
     /**
      * @var EntityObject
@@ -81,9 +94,10 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model
 
     /**
      * @param EntityObject $entityObject
+     * @param bool         $withUserFields
      * @return $this
      */
-    public function setEntityObject(EntityObject $entityObject): self
+    public function setEntityObject(EntityObject $entityObject, $withUserFields = false): self
     {
         $this->entityObject = $entityObject;
 
@@ -101,6 +115,16 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model
             }
         }
         $this->dates = $dates->unique()->toArray();
+
+//        if ( $withUserFields ) {
+//            $ufId = $this->bxTable()::getUfId();
+//            dd( $ufId );
+//
+//            $manager = UserFieldHelper::getInstance()->getManager();
+//            //$fields = $manager->GetUserFields( $this->{$this->getKeyName()} );
+//            $fields = $manager->GetUserFields( 'IBLOCK_1_SECTION' );
+//            dd( $fields );
+//        }
 
         return $this;
     }

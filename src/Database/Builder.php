@@ -17,6 +17,11 @@ class Builder
     protected $model;
 
     /**
+     * @var bool
+     */
+    protected $withUserFields = false;
+
+    /**
      * Get the model instance being queried.
      *
      * @return Model|static
@@ -107,7 +112,13 @@ class Builder
         }
 
         $model->exists = true;
-        return $model->setEntityObject( $entityObject );
+        return $model->setEntityObject( $entityObject, $this->withUserFields );
+    }
+
+    public function withUserFields(): Builder
+    {
+        $this->withUserFields = true;
+        return $this;
     }
 
     /**
