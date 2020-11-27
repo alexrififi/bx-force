@@ -10,9 +10,6 @@ use Bitrix\Main\ORM\Objectify\EntityObject;
 use Bitrix\Main\SystemException;
 use Bitrix\Main\Type\Date;
 use Bitrix\Main\Type\DateTime;
-use Bitrix\Main\UserField\Internal\Registry;
-use Bitrix\Main\UserField\Internal\UserFieldHelper;
-use CUserTypeManager;
 use Illuminate\Support\Str;
 
 /**
