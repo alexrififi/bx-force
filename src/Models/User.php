@@ -13,7 +13,9 @@ use Medvinator\BxForce\Database\Model;
  * @property string      $login
  * @property string      $name
  * @property string      $last_name
+ * @property string      $email
  * @property Carbon|null $personal_birthday
+ * @property string      $personal_phone
  */
 class User extends Model
 {
