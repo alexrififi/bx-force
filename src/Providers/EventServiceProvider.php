@@ -10,6 +10,7 @@ class EventServiceProvider
     protected const BX_MODULES = [
         'iblock',
         'main',
+        'pull',
         'sale',
         'search',
     ];
