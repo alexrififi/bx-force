@@ -8,11 +8,11 @@ use Medvinator\BxForce\Models\User;
 class CurrentUser
 {
     /**
-     * @var User
+     * @var User|null
      */
     protected static $cache;
 
-    public static function get(): User
+    public static function get(): ?User
     {
         if ( static::$cache ) {
             return static::$cache;
