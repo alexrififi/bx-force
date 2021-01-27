@@ -5,16 +5,21 @@ namespace Medvinator\BxForce\Routing;
 use Bitrix\Main\ArgumentTypeException;
 use Bitrix\Main\Context;
 use Bitrix\Main\Engine\ActionFilter;
+use Bitrix\Main\Engine\Contract\FallbackActionInterface;
 use Bitrix\Main\Engine\JsonController;
+use Bitrix\Main\Error;
 use Bitrix\Main\ErrorCollection;
 use Bitrix\Main\Response;
 use Exception;
+use Illuminate\Support\Arr;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-abstract class ApiController extends JsonController
+abstract class ApiController extends JsonController implements FallbackActionInterface
 {
     protected $authentication = null;
     protected $processableExceptions = [
+        BadRequestHttpException::class,
         NotFoundHttpException::class,
     ];
 
@@ -42,19 +47,17 @@ abstract class ApiController extends JsonController
      */
     protected function runProcessingException(Exception $e)
     {
-        $result = collect($this->processableExceptions)->every(function ($processableException) use ($e) {
-            return $e instanceof $processableException;
-        });
+        $result = ! is_null(Arr::first($this->processableExceptions, function ($type) use ($e) {
+            return $e instanceof $type;
+        }));
 
         if ($result === false) {
             return;
         }
 
+        Context::getCurrent()->getResponse()->setStatus($e->getStatusCode());
         $this->errorCollection = new ErrorCollection;
-        switch (true) {
-            case $e instanceof NotFoundHttpException:
-                Context::getCurrent()->getResponse()->setStatus(404);
-        }
+        $this->addError(new Error($e->getMessage()));
     }
 
     /**
@@ -74,5 +77,14 @@ abstract class ApiController extends JsonController
             : ['message' => (string)$errors[0]];
 
         $response->setContent($content ? json_encode($content) : null);
+    }
+
+    /**
+     * @param string $actionName
+     * @return mixed
+     */
+    public function fallbackAction($actionName)
+    {
+        return $this->$actionName();
     }
 }

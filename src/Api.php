@@ -101,13 +101,18 @@ class Api
     }
 
     /**
-     * @param array $handler
-     * @param array $vars
+     * @param array|callable $handler
+     * @param array          $vars
      */
-    protected function runController(array $handler, array $vars): void
+    protected function runController($handler, array $vars): void
     {
         $controllersConfig = Configuration::getInstance($this->module->implode('.'));
         $controllerBaseNamespace = collect($controllersConfig['controllers']['namespaces'])->search('api');
+
+        if (is_string($handler)) {
+            $handler = [$handler, '__invoke'];
+        }
+
         $controller = str_replace($controllerBaseNamespace . '\\', '', $handler[0]);
         $method = $handler[1];
 
