@@ -47,9 +47,9 @@ class Api
 
     public function handleByModule(string $module): self
     {
-        $this->module = Str::of( $module )
-            ->replace( '.', ':' )
-            ->explode( ':' );
+        $this->module = Str::of($module)
+            ->replace('.', ':')
+            ->explode(':');
 
         return $this;
     }
@@ -70,21 +70,21 @@ class Api
         $this->request = Context::getCurrent()->getRequest();
         $this->response = new Json;
 
-        $routeInfo = simpleDispatcher( $this->routes )->dispatch( $this->request->getRequestMethod(), $this->request->getRequestedPage() );
+        $routeInfo = simpleDispatcher($this->routes)->dispatch($this->request->getRequestMethod(), $this->request->getRequestedPage());
         switch ($routeInfo[0]) {
             case Dispatcher::NOT_FOUND:
-                $this->response->setStatus( 404 );
-                $this->addError( 'Неверный эндпоинт' );
+                $this->response->setStatus(404);
+                $this->addError('Неверный эндпоинт');
                 break;
             case Dispatcher::METHOD_NOT_ALLOWED:
-                $allowedMethods = implode( ',', $routeInfo[1] );
-                $this->response->setStatus( 405 );
-                $this->response->addHeader( 'Allow', $allowedMethods );
-                $this->addError( 'Метод ' . $this->request->getRequestMethod() . ' не разрешён. Для данного эндпоинта разрешается: ' . $allowedMethods );
+                $allowedMethods = implode(',', $routeInfo[1]);
+                $this->response->setStatus(405);
+                $this->response->addHeader('Allow', $allowedMethods);
+                $this->addError('Метод ' . $this->request->getRequestMethod() . ' не разрешён. Для данного эндпоинта разрешается: ' . $allowedMethods);
                 break;
             case Dispatcher::FOUND:
-                [ , $handler, $vars ] = $routeInfo;
-                $this->runController( $handler, $vars );
+                [, $handler, $vars] = $routeInfo;
+                $this->runController($handler, $vars);
         }
 
         $this->response->send();
@@ -95,9 +95,9 @@ class Api
      */
     protected function addError(string $message): void
     {
-        $this->response->setData( [
+        $this->response->setData([
             'message' => $message,
-        ] );
+        ]);
     }
 
     /**
@@ -106,13 +106,13 @@ class Api
      */
     protected function runController(array $handler, array $vars): void
     {
-        $controllersConfig = Configuration::getInstance( $this->module->implode( '.' ) );
-        $controllerBaseNamespace = collect( $controllersConfig['controllers']['namespaces'] )->search( 'api' );
-        $controller = str_replace( $controllerBaseNamespace . '\\', '', $handler[0] );
+        $controllersConfig = Configuration::getInstance($this->module->implode('.'));
+        $controllerBaseNamespace = collect($controllersConfig['controllers']['namespaces'])->search('api');
+        $controller = str_replace($controllerBaseNamespace . '\\', '', $handler[0]);
         $method = $handler[1];
 
-        $this->request->modifyByQueryString( "action={$this->module->implode( ':' )}.api.{$controller}.{$method}" );
-        $this->request->getPostList()->set( $vars );
+        $this->request->modifyByQueryString("action={$this->module->implode( ':' )}.api.{$controller}.{$method}");
+        $this->request->getPostList()->set($vars);
 
         Application::getInstance()->run();
     }

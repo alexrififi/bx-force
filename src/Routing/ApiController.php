@@ -27,7 +27,7 @@ abstract class ApiController extends JsonController
     {
         $filters = [];
 
-        if ( $this->authentication && is_subclass_of( $this->authentication, ActionFilter\Base::class ) ) {
+        if ($this->authentication && is_subclass_of($this->authentication, ActionFilter\Base::class)) {
             $filters[] = new $this->authentication;
         }
 
@@ -42,18 +42,18 @@ abstract class ApiController extends JsonController
      */
     protected function runProcessingException(Exception $e)
     {
-        $result = collect( $this->processableExceptions )->every( function ($processableException) use ($e) {
+        $result = collect($this->processableExceptions)->every(function ($processableException) use ($e) {
             return $e instanceof $processableException;
-        } );
+        });
 
-        if ( $result === false ) {
+        if ($result === false) {
             return;
         }
 
         $this->errorCollection = new ErrorCollection;
         switch (true) {
             case $e instanceof NotFoundHttpException:
-                Context::getCurrent()->getResponse()->setStatus( 404 );
+                Context::getCurrent()->getResponse()->setStatus(404);
         }
     }
 
@@ -69,10 +69,10 @@ abstract class ApiController extends JsonController
     public function finalizeResponse(Response $response): void
     {
         $errors = $response->getErrors();
-        $content = empty( $errors )
-            ? json_decode( $response->getContent(), true )['data']
-            : [ 'message' => (string) $errors[0] ];
+        $content = empty($errors)
+            ? json_decode($response->getContent(), true)['data']
+            : ['message' => (string)$errors[0]];
 
-        $response->setContent( $content ? json_encode( $content ) : null );
+        $response->setContent($content ? json_encode($content) : null);
     }
 }
