@@ -78,7 +78,7 @@ abstract class ApiController extends JsonController implements FallbackActionInt
             ? json_decode($response->getContent(), true)['data']
             : ['message' => (string)$errors[0]];
 
-        $response->setContent($content ? json_encode($content) : null);
+        $response->setContent(json_encode($content));
     }
 
     /**
