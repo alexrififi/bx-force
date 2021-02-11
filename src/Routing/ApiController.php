@@ -9,6 +9,8 @@ use Bitrix\Main\Engine\Contract\FallbackActionInterface;
 use Bitrix\Main\Engine\JsonController;
 use Bitrix\Main\Error;
 use Bitrix\Main\ErrorCollection;
+use Bitrix\Main\Loader;
+use Bitrix\Main\Request;
 use Bitrix\Main\Response;
 use Exception;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -16,6 +18,16 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 abstract class ApiController extends JsonController implements FallbackActionInterface
 {
     protected $authentication = null;
+    protected static $modules = [];
+
+    public function __construct(Request $request = null)
+    {
+        foreach (self::$modules as $module) {
+            Loader::requireModule($module);
+        }
+
+        parent::__construct($request);
+    }
 
     /**
      * Returns default pre-filters for action.
