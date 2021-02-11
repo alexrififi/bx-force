@@ -11,17 +11,11 @@ use Bitrix\Main\Error;
 use Bitrix\Main\ErrorCollection;
 use Bitrix\Main\Response;
 use Exception;
-use Illuminate\Support\Arr;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 abstract class ApiController extends JsonController implements FallbackActionInterface
 {
     protected $authentication = null;
-    protected $processableExceptions = [
-        BadRequestHttpException::class,
-        NotFoundHttpException::class,
-    ];
 
     /**
      * Returns default pre-filters for action.
@@ -47,11 +41,7 @@ abstract class ApiController extends JsonController implements FallbackActionInt
      */
     protected function runProcessingException(Exception $e)
     {
-        $result = ! is_null(Arr::first($this->processableExceptions, function ($type) use ($e) {
-            return $e instanceof $type;
-        }));
-
-        if ($result === false) {
+        if (! $e instanceof HttpException) {
             return;
         }
 
