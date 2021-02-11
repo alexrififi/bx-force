@@ -22,7 +22,7 @@ abstract class ApiController extends JsonController implements FallbackActionInt
 
     public function __construct(Request $request = null)
     {
-        foreach (self::$modules as $module) {
+        foreach (static::$modules as $module) {
             Loader::requireModule($module);
         }
 
