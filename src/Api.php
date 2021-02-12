@@ -66,7 +66,6 @@ class Api
      */
     public function run(): void
     {
-        $result = null;
         $this->request = Context::getCurrent()->getRequest();
         $this->response = new Json;
 
